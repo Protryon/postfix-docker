@@ -1,7 +1,11 @@
 FROM debian:bookworm-slim AS installer
 WORKDIR /runtime
 
-#RUN apt-get update && apt-get install postfix=3.7.5-2 opendkim=2.11.0 opendkim-tools=2.11.0 ca-certificates curl net-tools procps -y && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install postfix=3.7.5-2 postfix-pgsql=3.7.5-2 ca-certificates curl net-tools procps -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install postfix=3.7.5-2 postfix-pgsql=3.7.5-2 spamc=4.0.0-6 ca-certificates curl net-tools procps rsyslog -y && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/usr/sbin/postfix", "start-fg"]
+COPY ./start.sh /runtime/start.sh
+RUN chmod +x /runtime/start.sh
+
+RUN mkdir -p /usr/share/man/man1/mailq.1 /usr/share/man/man1/newaliases.1 /usr/share/man/man1/postalias.1 /usr/share/man/man1/postcat.1 /usr/share/man/man1/postconf.1 /usr/share/man/man1/postdrop.1 /usr/share/man/man1/postfix-tls.1 /usr/share/man/man1/postfix-tls.1 /usr/share/man/man1/postfix.1 /usr/share/man/man1/postkick.1 /usr/share/man/man1/postlock.1 /usr/share/man/man1/postlog.1 /usr/share/man/man1/postmap.1 /usr/share/man/man1/postmulti.1 /usr/share/man/man1/postqueue.1 /usr/share/man/man1/postsuper.1 /usr/share/man/man1/sendmail.1 /usr/share/man/man5/access.5 /usr/share/man/man5/aliases.5 /usr/share/man/man5/body_checks.5 /usr/share/man/man5/bounce.5 /usr/share/man/man5/canonical.5 /usr/share/man/man5/cidr_table.5 /usr/share/man/man5/generic.5 /usr/share/man/man5/header_checks.5 /usr/share/man/man5/master.5 /usr/share/man/man5/memcache_table.5 /usr/share/man/man5/socketmap_table.5 /usr/share/man/man5/nisplus_table.5 /usr/share/man/man5/postconf.5 /usr/share/man/man5/postfix-wrapper.5 /usr/share/man/man5/regexp_table.5 /usr/share/man/man5/relocated.5 /usr/share/man/man5/tcp_table.5 /usr/share/man/man5/transport.5 /usr/share/man/man5/virtual.5 /usr/share/man/man8/bounce.8 /usr/share/man/man8/cleanup.8 /usr/share/man/man8/anvil.8 /usr/share/man/man8/defer.8 /usr/share/man/man8/discard.8 /usr/share/man/man8/dnsblog.8 /usr/share/man/man8/error.8 /usr/share/man/man8/flush.8 /usr/share/man/man8/lmtp.8 /usr/share/man/man8/local.8 /usr/share/man/man8/master.8 /usr/share/man/man8/oqmgr.8 /usr/share/man/man8/pickup.8 /usr/share/man/man8/pipe.8 /usr/share/man/man8/postlogd.8 /usr/share/man/man8/postscreen.8 /usr/share/man/man8/proxymap.8 /usr/share/man/man8/qmgr.8 /usr/share/man/man8/qmqpd.8 /usr/share/man/man8/scache.8 /usr/share/man/man8/showq.8 /usr/share/man/man8/smtp.8 /usr/share/man/man8/smtpd.8 /usr/share/man/man8/spawn.8 /usr/share/man/man8/tlsproxy.8 /usr/share/man/man8/tlsmgr.8 /usr/share/man/man8/trace.8 /usr/share/man/man8/trivial-rewrite.8 /usr/share/man/man8/verify.8 /usr/share/man/man8/verify.8 /usr/share/man/man8/virtual.8 /usr/share/man/man5/pgsql_table.5 
+
+ENTRYPOINT ["/runtime/start.sh"]          
