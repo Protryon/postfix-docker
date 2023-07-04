@@ -1,7 +1,7 @@
-FROM debian:bookworm-slim AS installer
+FROM debian:trixie-slim AS installer
 WORKDIR /runtime
 
-RUN apt-get update && apt-get install postfix=3.7.5-2 postfix-pgsql=3.7.5-2 spamc=4.0.0-6 ca-certificates curl net-tools procps rsyslog -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install postfix=3.8.1-1 postfix-pgsql=3.8.1-1 spamc=4.0.0-6 ca-certificates curl net-tools procps rsyslog -y && rm -rf /var/lib/apt/lists/*
 
 COPY ./start.sh /runtime/start.sh
 RUN chmod +x /runtime/start.sh
